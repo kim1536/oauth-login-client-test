@@ -11,6 +11,9 @@ const LayoutMenu = () => {
           <li>
             <Link to="/login">Login</Link>
           </li>
+          <li>
+            <Link to="/Singup">SingUp</Link>
+          </li>
         </ul>
       </nav>
 
