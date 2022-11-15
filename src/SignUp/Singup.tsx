@@ -8,41 +8,60 @@ import './singup.css';
 const Singup = () => {
 
   const url = '/users';
+  /**
+   * recoil user목록
+   */
   const [userList, setUserlist] = useRecoilState<Array<UserModel>>(userListAtom);
-  const [singup, setSingup] = useState({  
+  
+  /**
+   * user 기본 정보
+   */
+  const [user, setUser] = useState<UserModel>({  
     id: "",
     userID: "",
     userPW: "",
     userNm: "",
-    email: "",});
-
-  const { userID, userPW, userNm,  email} = singup;
+    email: ""
+  });
+  
 
   useEffect(() => {
     getUsers();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * user목록을 가져온다.
+   */
   const getUsers = async (): Promise<void> => {
     const res: AxiosResponse<any, any> = await (await axios.get(`${url}`, {}));
     setUserlist(res.data);
   };
 
-  const handleTodoForm = async (e: any): Promise<void> => {
+  /**
+   * user을 생성한다.
+   */
+  const creatUser = async (e: any): Promise<void> => {
     e.preventDefault();
-     await axios.post(`${url}`,singup);
+     await axios.post(`${url}`,user);
      await getUsers();
   };
 
-  // 3 조회 rest api에 todo 삭제 요청.
-  const todoDelete = async (id: string): Promise<void> => {
+  /**
+   * user을 삭제한다.
+   */
+  const userDelete = async (id: string): Promise<void> => {
     await axios.delete(`${url}/${id}`, {});
     setUserlist(userList.filter((singup => singup.id !== id)));
   };
 
+  /**
+   * input 상태 관리
+   */
   const handleOnChangeForm = (e: any) => {
     const { name, value } = e.target;
-    setSingup({
-      ...singup, 
+    setUser({
+      ...user, 
       [name]: value 
     }
     );
@@ -62,37 +81,37 @@ const Singup = () => {
             <p>{user.userNm}</p>
             <p>{user.userPW}</p>
             <p>{user.email}</p>
-            <button type="button" onClick={() => todoDelete(user.id)}>삭제</button>
+            <button type="button" onClick={() => userDelete(user.id)}>삭제</button>
           </div>
         ))}
       </div>
       <div>
-      <form onSubmit={handleTodoForm}>
+      <form onSubmit={creatUser}>
           <input
             type='text'
             placeholder='ID'
             name="userID"
-            value={userID}
+            value={user.userID}
             onChange={handleOnChangeForm}
           />
           <input
             type='text'
             name="userNm"
-            value={userNm}
+            value={user.userNm}
             placeholder='NM'
             onChange={handleOnChangeForm}
           />
           <input
             type='text'
             name="userPW"
-            value={userPW}
+            value={user.userPW}
             placeholder='PW'
             onChange={handleOnChangeForm}
           />
           <input
             type='text'
             name="email"
-            value={email}
+            value={user.email}
             placeholder='email'
             onChange={handleOnChangeForm}
           />
