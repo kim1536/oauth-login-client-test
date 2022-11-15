@@ -23,7 +23,7 @@ const Singup = () => {
   }, []);
 
   const getUsers = async (): Promise<void> => {
-    const res: AxiosResponse<any, any> = await (await axios.get(`${url}`, {})).data;
+    const res: AxiosResponse<any, any> = await (await axios.get(`${url}`, {}));
     setUserlist(res.data);
   };
 
@@ -62,7 +62,7 @@ const Singup = () => {
             <p>{user.userNm}</p>
             <p>{user.userPW}</p>
             <p>{user.email}</p>
-            <button onClick={() => todoDelete(user.id)}></button>
+            <button type="button" onClick={() => todoDelete(user.id)}>삭제</button>
           </div>
         ))}
       </div>
@@ -79,14 +79,14 @@ const Singup = () => {
             type='text'
             name="userNm"
             value={userNm}
-            placeholder='PW'
+            placeholder='NM'
             onChange={handleOnChangeForm}
           />
           <input
             type='text'
             name="userPW"
             value={userPW}
-            placeholder='NM'
+            placeholder='PW'
             onChange={handleOnChangeForm}
           />
           <input
