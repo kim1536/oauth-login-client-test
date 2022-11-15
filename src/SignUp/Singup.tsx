@@ -7,7 +7,7 @@ import './singup.css';
 
 const Singup = () => {
 
-  const url = 'http://localhost:8000/login-server/login/users';
+  const url = '/users';
   const [userList, setUserlist] = useRecoilState<Array<UserModel>>(userListAtom);
   const [singup, setSingup] = useState({  
     id: "",
@@ -16,28 +16,21 @@ const Singup = () => {
     userNm: "",
     email: "",});
 
-  // 화면에 todoList 출력
+  const { userID, userPW, userNm,  email} = singup;
+
   useEffect(() => {
-    getTodoCtnts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getUsers();
   }, []);
 
-  // 1 rest api에 todoList 요청.
-  const getTodoCtnts = async (): Promise<void> => {
+  const getUsers = async (): Promise<void> => {
     const res: AxiosResponse<any, any> = await (await axios.get(`${url}`, {})).data;
     setUserlist(res.data);
   };
 
-  //  2 rest api에 todo 추가 혹은 수정 요청.
   const handleTodoForm = async (e: any): Promise<void> => {
     e.preventDefault();
-     // rest api에 todo 추가 요청.
-     await axios.post(`${url}`, singup)
-     await getTodoCtnts();
-      // // rest api에 todo 수정 요청.
-      // await axios.put(`${url}/${singup.id}`, singup);
-      // await getTodoCtnts();
-      // setSelectedIdx(-1);
+     await axios.post(`${url}`,singup);
+     await getUsers();
   };
 
   // 3 조회 rest api에 todo 삭제 요청.
@@ -46,6 +39,14 @@ const Singup = () => {
     setUserlist(userList.filter((singup => singup.id !== id)));
   };
 
+  const handleOnChangeForm = (e: any) => {
+    const { name, value } = e.target;
+    setSingup({
+      ...singup, 
+      [name]: value 
+    }
+    );
+  };
   
 
   return (
@@ -70,22 +71,30 @@ const Singup = () => {
           <input
             type='text'
             placeholder='ID'
-            onChange={ (e) => setSingup({...singup, userID: e.target.value})}
+            name="userID"
+            value={userID}
+            onChange={handleOnChangeForm}
           />
           <input
             type='text'
+            name="userNm"
+            value={userNm}
             placeholder='PW'
-            onChange={ (e) => setSingup({...singup, userPW: e.target.value})}
+            onChange={handleOnChangeForm}
           />
           <input
             type='text'
+            name="userPW"
+            value={userPW}
             placeholder='NM'
-            onChange={ (e) => setSingup({...singup, userNm: e.target.value})}
+            onChange={handleOnChangeForm}
           />
           <input
             type='text'
+            name="email"
+            value={email}
             placeholder='email'
-            onChange={ (e) => setSingup({...singup, email: e.target.value})}
+            onChange={handleOnChangeForm}
           />
           <button type="submit">등록</button>
         </form>

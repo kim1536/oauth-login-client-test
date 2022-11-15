@@ -19,3 +19,6 @@ export default class UserModel {
     this.email = email
   }
 }
+
+
+
