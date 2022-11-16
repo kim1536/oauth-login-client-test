@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import UserModel from "./recoil/model/userModel";
 import { userListAtom } from "./recoil/state/todoAtom";
-import './singup.css';
+import './css/singup.css';
 
 const Singup = () => {
 
@@ -21,14 +21,14 @@ const Singup = () => {
     userID: "",
     userPW: "",
     userNm: "",
-    email: ""
+    email: "",
+    token:""
   });
   
 
   useEffect(() => {
     getUsers();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   /**
    * user목록을 가져온다.
@@ -45,6 +45,14 @@ const Singup = () => {
     e.preventDefault();
      await axios.post(`${url}`,user);
      await getUsers();
+     setUser({
+      id: "",
+      userID: "",
+      userPW: "",
+      userNm: "",
+      email: "",
+      token:""
+    });
   };
 
   /**
@@ -63,8 +71,7 @@ const Singup = () => {
     setUser({
       ...user, 
       [name]: value 
-    }
-    );
+    });
   };
   
 
@@ -102,14 +109,14 @@ const Singup = () => {
             onChange={handleOnChangeForm}
           />
           <input
-            type='text'
+            type='password'
             name="userPW"
             value={user.userPW}
             placeholder='PW'
             onChange={handleOnChangeForm}
           />
           <input
-            type='text'
+            type='email'
             name="email"
             value={user.email}
             placeholder='email'

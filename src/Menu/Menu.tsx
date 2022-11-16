@@ -1,6 +1,6 @@
 import { Outlet, Link } from "react-router-dom";
 
-const LayoutMenu = () => {
+const Menu = () => {
   return (
     <>
       <nav>
@@ -12,7 +12,7 @@ const LayoutMenu = () => {
             <Link to="/login">Login</Link>
           </li>
           <li>
-            <Link to="/Singup">SingUp</Link>
+            <Link to="/singup">SingUp</Link>
           </li>
         </ul>
       </nav>
@@ -22,4 +22,4 @@ const LayoutMenu = () => {
   )
 };
 
-export default LayoutMenu;
+export default Menu;

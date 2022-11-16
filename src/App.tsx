@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
-import LayoutMenu from './Layout/LayoutMenu';
+import Menu from './Menu/Menu';
 import Home from './Home/Home';
 import Login from './Login/Login';
 import { RecoilRoot } from 'recoil';
@@ -12,8 +12,8 @@ function App() {
     <RecoilRoot>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<LayoutMenu />}>
-            <Route index element={<Home />} />
+          <Route path='/' element={<Menu />}>
+            <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/Singup' element={<Singup />} />
           </Route>
