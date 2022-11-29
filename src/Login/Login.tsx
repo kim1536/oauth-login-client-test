@@ -46,12 +46,39 @@ const Login = () => {
           localStorage.setItem('user', JSON.stringify(res.data))
           setAuth(res.data)
           // 작업 완료 되면 페이지 이동(새로고침)
-          navigate("/");
+          // navigate("/");
       }
   })
   .catch()
   };
-    
+
+  const onClickGoogleLogin = async (e:any) => {
+    try {
+      const request = await axios.get("http://localhost:3001/createAuthLink");
+      const response = await request.data
+      window.location.href = response.url;
+      console.log(response);
+    } catch (error) {
+      console.log("App.js 12 | error", error);
+      throw new Error("Issue with Login");
+    }
+  };
+
+  const onClickKakaoLogin = async (e:any) => {
+    axios.get("/redirecturlkakao");
+    // try {
+    //   const request = await axios.get("http://localhost:3001/redirecturlkakao");
+    //   const response = await request.data
+    //   window.location.href = response.url;
+    //   console.log(response);
+    // } catch (error) {
+    //   console.log("App.js 12 | error", error);
+    //   throw new Error("Issue with Login");
+    // }
+  };
+
+
+
   return(
     <div>
         <h2>Login</h2>
@@ -65,6 +92,15 @@ const Login = () => {
         </div>
         <div>
             <button type='button' onClick={onClickLogin}>Login</button>
+        </div>
+        <div>
+            <button type='button' onClick={onClickGoogleLogin}>Google Login</button>
+        </div>
+        <div>
+            <button type='button' onClick={onClickKakaoLogin}>Kakao Login</button>
+        </div>
+        <div>
+          <a href="http://localhost:3001/authkakao">카카오 간편 로그인</a>
         </div>
     </div>
   )

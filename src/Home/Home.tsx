@@ -12,12 +12,12 @@ const Home = () => {
   useEffect(() => {
     if(localStorage.getItem('user') === null){
     // localStorage에 user 라는 key 값으로 저장된 값이 없다면
-      console.log('isLogin ?? 1:: ', isLogin)
+      // console.log('isLogin ?? 1:: ', isLogin)
       return;
     } else {
     // localStorage에 user 라는 key 값으로 저장된 값이 있다면
     // 로그인 상태 변경
-      console.log('isLogin ?? 2:: ', isLogin) 
+      // console.log('isLogin ?? 2:: ', isLogin) 
       return setIsLogin(true);
     }
   },[isLogin])
