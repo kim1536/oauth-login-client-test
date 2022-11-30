@@ -28,7 +28,7 @@ const Singup = () => {
 
   useEffect(() => {
     getUsers();
-  });
+  },[]);
 
   /**
    * user목록을 가져온다.
