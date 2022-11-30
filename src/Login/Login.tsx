@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { MouseEvent, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { authAtom } from './recoil/authAtom';
@@ -48,7 +48,6 @@ const Login = () => {
     });
   }
 
-
   /**
   * 일반 login 
   */
@@ -82,9 +81,9 @@ const Login = () => {
 
   /**
    * 구글 로그인
-   * @param e 이벤트 핸들러
+   * 
    */
-   const onClickGoogleLogin = async (e: any) => {
+  const onClickGoogleLogin = async (e: MouseEvent) => {
     try {
       const response = await (await axios.get("http://localhost:3001/createAuthLink")).data;
       window.location.href = response.url;
@@ -94,14 +93,14 @@ const Login = () => {
     }
   };
 
- // ============================= kakao login ==================================
+  // ============================= kakao login ==================================
 
   /**
    * kakao javascript Key
    */
   const jsKey = "56877024f579df1b8545a45be6ced048";
 
-  // SDK는 한 번만 초기화해야 한다.
+  // SDK 초기화
   // 중복되는 초기화를 막기 위해 isInitialized()로 SDK 초기화 여부를 판단한다.
   if (!Kakao.isInitialized()) {
     console.log(Kakao.isInitialized());
@@ -112,9 +111,8 @@ const Login = () => {
   }
 
   /**
- * 카카오 로그인
- * @param e 이벤트 핸들러
- */
+  * kakao sdk api 사용한 카카오 로그인 
+  */
   const onClickKakaoLogin = async (e: any) => {
     await Kakao.Auth.authorize({
       redirectUri: 'http://localhost:3001/redirecturlkakao',
@@ -122,21 +120,19 @@ const Login = () => {
   };
 
 
-/**
-   * 카카오 로그인 
-   * @param e 이벤트 핸들러
-   */
- const kakaoLogin = async (e: any) => {
-  try {
-    const response = await (await axios.get("http://localhost:3001/authkakao"));
-    console.log(response);
-    console.log(response.data);
-    window.location.href = response.data
-  } catch (error) {
-    console.log("App.js 12 | error", error);
-    throw new Error("Issue with Login");
-  }
-};
+  /**
+  * kakao sdk api 사용하지 않는 카카오 로그인 
+  */
+  const kakaoLogin = async (e: any) => {
+    try {
+      const response = await (await axios.get("http://localhost:3001/authkakao"));
+      window.location.href = await response.data
+      console.log(response.data);
+    } catch (error) {
+      console.log("App.js 12 | error", error);
+      throw new Error("Issue with Login");
+    }
+  };
 
 
   return (
