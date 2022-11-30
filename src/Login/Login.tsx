@@ -10,39 +10,54 @@ import { useNavigate } from 'react-router-dom';
 //   }
 // }
 
+/**
+ * kakao api
+ */
 const Kakao = (window as any).Kakao;
 
 const Login = () => {
+  const baseUrl = "http://localhost:3001";
 
-  const url = '/login';
-
+  /**
+   * react nav hook
+   */
   const navigate = useNavigate();
 
+  /**
+   * recoil
+   */
   const [, setAuth] = useRecoilState(authAtom);
 
-  const [input, setInput] = useState({
+
+  /**
+   * 일반 로그인 정보 관리
+   */
+  const [login, setLogin] = useState({
     userID: "",
     userPW: "",
   })
 
+  /**
+   * 폼 데이터의 변경을 반영한다.
+   */
   const handleInput = (e: any) => {
     const { name, value } = e.target;
-    setInput({
-      ...input,
+    setLogin({
+      ...login,
       [name]: value
     });
   }
 
 
   /**
-  * login 버튼 클릭 이벤트
+  * 일반 login 
   */
   const onClickLogin = async (e: any): Promise<void> => {
     e.preventDefault();
-    await axios.get(`${url}`, {
+    await axios.get(`${baseUrl}'/login';`, {
       params: {
-        'userID': input.userID,
-        'userPW': input.userPW
+        'userID': login.userID,
+        'userPW': login.userPW
       }
     })
       .then(res => {
@@ -51,7 +66,7 @@ const Login = () => {
         if (res.data.userID === undefined) {
           // id 일치하지 않는 경우
           alert('입력하신 id 혹은 pw가 일치하지 않습니다.')
-        } else if (res.data.userID === input.userID) {
+        } else if (res.data.userID === login.userID) {
           // id, pw 모두 일치 
           console.log('로그인 성공')
           localStorage.setItem('user', JSON.stringify(res.data))
@@ -63,6 +78,23 @@ const Login = () => {
       .catch()
   };
 
+  // ============================= google login ================================
+
+  /**
+   * 구글 로그인
+   * @param e 이벤트 핸들러
+   */
+   const onClickGoogleLogin = async (e: any) => {
+    try {
+      const response = await (await axios.get("http://localhost:3001/createAuthLink")).data;
+      window.location.href = response.url;
+    } catch (error) {
+      console.log("App.js 12 | error", error);
+      throw new Error("Issue with Login");
+    }
+  };
+
+ // ============================= kakao login ==================================
 
   /**
    * kakao javascript Key
@@ -80,21 +112,6 @@ const Login = () => {
   }
 
   /**
-   * 구글 로그인
-   * @param e 이벤트 핸들러
-   */
-  const onClickGoogleLogin = async (e: any) => {
-    try {
-      const response = await (await axios.get("http://localhost:3001/createAuthLink")).data;
-      window.location.href = response.url;
-    } catch (error) {
-      console.log("App.js 12 | error", error);
-      throw new Error("Issue with Login");
-    }
-  };
-
-
-  /**
  * 카카오 로그인
  * @param e 이벤트 핸들러
  */
@@ -105,16 +122,33 @@ const Login = () => {
   };
 
 
+/**
+   * 카카오 로그인 
+   * @param e 이벤트 핸들러
+   */
+ const kakaoLogin = async (e: any) => {
+  try {
+    const response = await (await axios.get("http://localhost:3001/authkakao"));
+    console.log(response);
+    console.log(response.data);
+    window.location.href = response.data
+  } catch (error) {
+    console.log("App.js 12 | error", error);
+    throw new Error("Issue with Login");
+  }
+};
+
+
   return (
     <div>
       <h2>Login</h2>
       <div>
         <label htmlFor='input_id'>ID : </label>
-        <input type='text' name='userID' value={input.userID} onChange={handleInput} />
+        <input type='text' name='userID' value={login.userID} onChange={handleInput} />
       </div>
       <div>
         <label htmlFor='input_pw'>PW : </label>
-        <input type='password' name='userPW' value={input.userPW} onChange={handleInput} />
+        <input type='password' name='userPW' value={login.userPW} onChange={handleInput} />
       </div>
       <div>
         <button type='button' onClick={onClickLogin}>Login</button>
@@ -126,7 +160,7 @@ const Login = () => {
         <button type='button' id="kakao-login-btn" onClick={onClickKakaoLogin}>Kakao Login</button>
       </div>
       <div>
-        <a href="http://localhost:3001/authkakao">카카오 간편 로그인</a>
+        <button type='button' onClick={kakaoLogin}>카카오 간편 로그인</button>
       </div>
     </div>
   )

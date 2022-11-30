@@ -6,8 +6,8 @@ import { userListAtom } from "./recoil/state/todoAtom";
 import './css/singup.css';
 
 const Singup = () => {
-
-  const url = '/users';
+  const baseUrl = "http://localhost:3001";
+  
   /**
    * recoil user목록
    */
@@ -34,7 +34,7 @@ const Singup = () => {
    * user목록을 가져온다.
    */
   const getUsers = async (): Promise<void> => {
-    const res: AxiosResponse<any, any> = await (await axios.get(`${url}`, {}));
+    const res: AxiosResponse<any, any> = await (await axios.get(`${baseUrl}/users`, {}));
     setUserlist(res.data);
   };
 
@@ -43,7 +43,7 @@ const Singup = () => {
    */
   const creatUser = async (e: any): Promise<void> => {
     e.preventDefault();
-     await axios.post(`${url}`,user);
+     await axios.post(`${baseUrl}/users`,user);
      await getUsers();
      setUser({
       id: "",
@@ -59,7 +59,7 @@ const Singup = () => {
    * user을 삭제한다.
    */
   const userDelete = async (id: string): Promise<void> => {
-    await axios.delete(`${url}/${id}`, {});
+    await axios.delete(`${baseUrl}/users/${id}`, {});
     setUserlist(userList.filter((singup => singup.id !== id)));
   };
 
